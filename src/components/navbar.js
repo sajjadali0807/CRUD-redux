@@ -6,12 +6,13 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import "react-toastify/dist/ReactToastify.css";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect } from "react";
 import { allpersonApi, deleteApi } from "../redux/action/useraction";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../redux/slice/userslice";
 import Createmodal from "./createmodal";
+import createicon from "./icons8.png";
+import Usertable from "./usertable";
 
 //------MUI style Components related funtions-----
 
@@ -54,7 +55,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-//
+//------END Of MUI style Components related funtions-----
+
 export default function PrimarySearchAppBar() {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -69,20 +71,17 @@ export default function PrimarySearchAppBar() {
     setOpen(true);
   };
 
-  //-----passing user id to API-----
-  const handledelete = (e) => {
-    dispatch(deleteApi(e?.person_id));
-  };
-
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: "#444791" }}>
         <Toolbar>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+            sx={{
+              display: { xs: "none", sm: "block" },
+            }}
           >
             Admin Dashboard
           </Typography>
@@ -96,60 +95,24 @@ export default function PrimarySearchAppBar() {
             />
           </Search>
           <button
+            style={{
+              backgroundColor: "#e5dada24",
+              background: "transperent",
+              fontWeight: "500",
+              border: "none ",
+              boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+            }}
             onClick={handleCreatemodal}
             type="button"
             class="btn btn-primary"
             data-bs-toggle="modal"
             data-bs-target="#exampleModal"
           >
-            Create
+            <img src={createicon} alt="logo" /> Create User
           </button>
         </Toolbar>
       </AppBar>
-
-      <table className="table">
-        <thead
-          style={{
-            background: "black",
-            color: "white",
-            borderColor: "black",
-            BorderStyle: "groove",
-          }}
-        >
-          <tr>
-            <th scope="col">person Id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Contact No</th>
-            <th scope="col">Address</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-
-        {updateInfo?.map((e, i) => (
-          <tbody>
-            <tr>
-              <td>{e?.person_id}</td>
-              <td>{e?.name}</td>
-              <td>{e?.contact_no}</td>
-              <td>{e?.address}</td>
-              <td>{e?.amount}</td>
-              <td>{e?.status}</td>
-              <td>
-                {" "}
-                <DeleteIcon
-                  sx={{ cursor: "pointer" }}
-                  onClick={(j) => {
-                    handledelete(e);
-                    console.log(e?.person_id, "its ");
-                  }}
-                />
-              </td>
-            </tr>
-          </tbody>
-        ))}
-      </table>
+      <Usertable />
       <Createmodal setOpen={setOpen} open={open} />
     </>
   );
