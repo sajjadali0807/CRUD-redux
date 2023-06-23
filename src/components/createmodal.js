@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import * as yup from "yup";
+import { useFormik } from "formik";
 import { createApi } from "../redux/action/useraction";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -13,7 +15,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -23,23 +24,55 @@ export default function Createmodal({ setOpen, open }) {
   const handleClose = () => {
     setOpen(false);
   };
-  const [formdata, setformData] = React.useState({
-    name: "",
-    address: " ",
-    contact_no: "",
-    amount: "",
-  });
+  // const [formdata, setformData] = React.useState({
+  //   name: "",
+  //   address: " ",
+  //   contact_no: "",
+  //   amount: "",
+  // });
 
   //-----This funtion is to pass the create user details from modal to api-----
 
-  const handleChange = (e) => {
-    setformData({ ...formdata, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setformData({ ...formdata, [e.target.name]: e.target.value });
+  // };
 
-  const handleCreate = () => {
-    dispatch(createApi(formdata));
-    setOpen(false);
-  };
+  // const handleCreate = () => {
+  //   dispatch(createApi(formdata));
+  //   setOpen(false);
+  // };
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      address: "",
+      contact_no: "",
+      amount: "",
+    },
+    validationSchema: yup.object({
+      name: yup.string().required("Name is required"),
+      address: yup.string().required("Address is required"),
+
+      contact_no: yup
+        .string()
+        .required("No is required")
+        .min(10, "should be 10 digits")
+        .max(10, "10 digits required"),
+      amount: yup.string().required("Amount is required"),
+    }),
+    onSubmit: (res) => {
+      const userDetails = {
+        name: res?.name,
+        address: res?.address,
+        contact_no: res?.contact_no,
+        amount: res?.amount,
+      };
+
+      dispatch(createApi(userDetails));
+      setOpen(false);
+    },
+  });
+
   return (
     <div>
       <Modal
@@ -63,20 +96,28 @@ export default function Createmodal({ setOpen, open }) {
               <TextField
                 className="mt-3 user-d"
                 required
+                placeholder="Enter your Name"
                 id="outlined-required"
                 label="Name"
                 name="name"
-                value={formdata.name}
-                onChange={handleChange}
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                helperText={formik.touched.name ? formik.errors.name : null}
+                error={formik.touched.name ? formik.errors.name : null}
               />
               <TextField
                 className="mt-3 user-d"
                 required
+                placeholder="Enter Adress"
                 id="outlined-required"
                 name="address"
                 label="Address"
-                value={formdata.address}
-                onChange={handleChange}
+                value={formik.values.address}
+                onChange={formik.handleChange}
+                helperText={
+                  formik.touched.address ? formik.errors.address : null
+                }
+                error={formik.touched.address ? formik.errors.address : null}
               />
             </div>
             <div className="col-lg-6">
@@ -84,27 +125,39 @@ export default function Createmodal({ setOpen, open }) {
               <TextField
                 className="mt-3 user-d"
                 required
+                placeholder="Enter Contact No"
                 name="contact_no"
                 id="outlined-required"
                 label="Contact No"
-                value={formdata.contact_no}
-                onChange={handleChange}
+                value={formik.values.contact_no}
+                onChange={formik.handleChange}
+                helperText={
+                  formik.touched.contact_no ? formik.errors.contact_no : null
+                }
+                error={
+                  formik.touched.contact_no ? formik.errors.contact_no : null
+                }
               />
               <TextField
                 className="mt-3 user-d"
                 required
+                placeholder="Enter Amount"
                 name="amount"
                 id="outlined-required"
                 label="Amount Paid"
-                value={formdata.amount}
-                onChange={handleChange}
+                value={formik.values.amount}
+                onChange={formik.handleChange}
+                helperText={formik.touched.amount ? formik.errors.amount : null}
+                error={formik.touched.amount ? formik.errors.amount : null}
               />
             </div>
           </div>
 
           <div style={{ textAlign: "center" }}>
             <Button
-              onClick={handleCreate}
+              sx={{ backgroundColor: "#444791" }}
+              type="submit"
+              onClick={formik.handleSubmit}
               className="mt-3 creater"
               variant="contained"
             >

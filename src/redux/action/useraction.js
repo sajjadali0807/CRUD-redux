@@ -8,6 +8,7 @@ export function allpersonApi() {
     dispatch(updateAction({ isloading: true }));
     UserAPIService("GET", "http://192.168.2.122:9000/app/all/person")
       .then((e) => {
+        console.log("hii brrooo", e);
         dispatch(
           updateAction({
             isloading: false,

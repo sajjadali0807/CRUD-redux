@@ -64,7 +64,6 @@ export default function PrimarySearchAppBar() {
 
   useEffect(() => {
     dispatch(allpersonApi());
-    console.log("API's response In Nav page", updateInfo);
   }, []);
 
   const handleCreatemodal = () => {

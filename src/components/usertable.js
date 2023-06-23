@@ -51,7 +51,7 @@ export default function Usertable() {
                 sx={{ cursor: "pointer" }}
                 onClick={(j) => {
                   handledelete(e);
-                  console.log(e?.person_id, "its ");
+                  // console.log(e?.person_id, "its ");
                 }}
               />
               <img
@@ -59,7 +59,7 @@ export default function Usertable() {
                 src={createicon}
                 alt="createlogo"
                 onClick={(k) => {
-                  console.log("this is edit logo", e?.person_id);
+                  // console.log("this is edit logo", e?.person_id);
                 }}
               />
             </td>
